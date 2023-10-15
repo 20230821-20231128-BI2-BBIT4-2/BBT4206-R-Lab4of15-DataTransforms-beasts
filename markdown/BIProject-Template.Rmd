@@ -15,12 +15,12 @@ editor_options:
 
 # Student Details
 
-|                                              |     |
-|----------------------------------------------|-----|
-| **Student ID Number**                        | ... |
-| **Student Name**                             | ... |
-| **BBIT 4.2 Group**                           | ... |
-| **BI Project Group Name/ID (if applicable)** | ... |
+|                                              |                             |
+|--------------------------------------------------------|----------------|
+| **Student ID Number**                        | 119630,135844,131038,104135 |
+| **Student Name**                             | Beasts                      |
+| **BBIT 4.2 Group**                           | A&B&C                       |
+| **BI Project Group Name/ID (if applicable)** | Beasts                      |
 
 # Setup Chunk
 
@@ -51,9 +51,246 @@ Refer to the APA 7th edition manual for rules on how to cite datasets: <https://
 
 ```{r Dataset Loader}
 library(readr)
+student_performance_dataset <-
+  read_csv("data/20230412-20230719-BI1-BBIT4-1-StudentPerformanceDataset.CSV",
+           col_types =
+             cols(
+               class_group = col_factor(levels = c("A", "B", "C")),
+               gender = col_factor(levels = c("1", "0")),
+               YOB = col_date(format = "%Y"),
+               regret_choosing_bi = col_factor(levels = c("1", "0")),
+               drop_bi_now = col_factor(levels = c("1", "0")),
+               motivator = col_factor(levels = c("1", "0")),
+               read_content_before_lecture =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               anticipate_test_questions =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               answer_rhetorical_questions =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               find_terms_I_do_not_know =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               copy_new_terms_in_reading_notebook =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               take_quizzes_and_use_results =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               reorganise_course_outline =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               write_down_important_points =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               space_out_revision =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               studying_in_study_group =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               schedule_appointments =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               goal_oriented = col_factor(levels = c("1", "0")),
+               spaced_repetition =
+                 col_factor(levels = c("1", "2", "3", "4")),
+               testing_and_active_recall =
+                 col_factor(levels = c("1", "2", "3", "4")),
+               interleaving = col_factor(levels = c("1", "2", "3", "4")),
+               categorizing = col_factor(levels = c("1", "2", "3", "4")),
+               retrospective_timetable =
+                 col_factor(levels = c("1", "2", "3", "4")),
+               cornell_notes = col_factor(levels = c("1", "2", "3", "4")),
+               sq3r = col_factor(levels = c("1", "2", "3", "4")),
+               commute = col_factor(levels = c("1", "2", "3", "4")),
+               study_time = col_factor(levels = c("1", "2", "3", "4")),
+               repeats_since_Y1 = col_integer(),
+               paid_tuition = col_factor(levels = c("0", "1")),
+               free_tuition = col_factor(levels = c("0", "1")),
+               extra_curricular = col_factor(levels = c("0", "1")),
+               sports_extra_curricular = col_factor(levels = c("0", "1")),
+               exercise_per_week = col_factor(levels = c("0", "1", "2", "3")),
+               meditate = col_factor(levels = c("0", "1", "2", "3")),
+               pray = col_factor(levels = c("0", "1", "2", "3")),
+               internet = col_factor(levels = c("0", "1")),
+               laptop = col_factor(levels = c("0", "1")),
+               family_relationships =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               friendships = col_factor(levels = c("1", "2", "3", "4", "5")),
+               romantic_relationships =
+                 col_factor(levels = c("0", "1", "2", "3", "4")),
+               spiritual_wellnes =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               financial_wellness =
+                 col_factor(levels = c("1", "2", "3", "4", "5")),
+               health = col_factor(levels = c("1", "2", "3", "4", "5")),
+               day_out = col_factor(levels = c("0", "1", "2", "3")),
+               night_out = col_factor(levels = c("0", "1", "2", "3")),
+               alcohol_or_narcotics =
+                 col_factor(levels = c("0", "1", "2", "3")),
+               mentor = col_factor(levels = c("0", "1")),
+               mentor_meetings = col_factor(levels = c("0", "1", "2", "3")),
+               `Attendance Waiver Granted: 1 = Yes, 0 = No` =
+                 col_factor(levels = c("0", "1")),
+               GRADE = col_factor(levels = c("A", "B", "C", "D", "E"))),
+           locale = locale())
 
-# Provide the executable R code inside the various code chunks as guided by the
-# lab work.
+#View(student_performance_dataset)
+```
+Subset
+```{r}
+library(dplyr)
+
+# Create a subset with only the numeric columns,the non-numeric columns have been removed.
+performance_numeric_dataset <- student_performance_dataset[sapply(student_performance_dataset, is.numeric)]
+
+#  keep the first 11 numeric columns
+performance_numeric_dataset <- performance_numeric_dataset[, 39:49]
+
+# renamed the columns
+performance_numeric_dataset <- performance_numeric_dataset %>% 
+  rename(Lab2 = `Lab 2 - 2.e. -  (Linear Regression using Gradient Descent) x/5`, Lab3 = `Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5`, Lab4 = `Lab 4-2.h.- (Linear Discriminant Analysis) x/5`, Lab5 = `Lab 5 - Chart JS Dashboard Setup x/5`, LabWork = `Lab Work (7%) x/25 x 100`, CAT1 = `CAT 1 (8%): x/38 x 100`, CAT2 = `CAT 2 (8%): x/100 x 100`, Absenteeism = `Absenteeism Percentage`, Coursework = `Coursework TOTAL: x/40 (40%)`, EXAM = `EXAM: x/60 (60%)`, TOTAL = `TOTAL = Coursework TOTAL + EXAM (100%)`)
+
+```
+Scale Data Transform
+BEFORE
+```{r}
+library(caret)
+summary(performance_numeric_dataset)
+
+performance_numeric_dataset_yield <- as.numeric(unlist(performance_numeric_dataset[, 11]))
+hist(performance_numeric_dataset_yield, main = names(performance_numeric_dataset)[11])
+
+model_of_the_transform <- preProcess(performance_numeric_dataset, method = c("scale"))
+print(model_of_the_transform)
+performance_data_scale_transform <- predict(model_of_the_transform, performance_numeric_dataset)
+```
+AFTER
+```{r}
+summary(performance_data_scale_transform)
+
+performance_numeric_dataset_yield <- as.numeric(unlist(performance_data_scale_transform[, 11]))
+hist(performance_numeric_dataset_yield, main = names(performance_data_scale_transform)[11])
+```
+Center Data Transform
+```{r}
+summary(performance_numeric_dataset)
+
+model_of_the_transform <- preProcess(performance_numeric_dataset, method = c("center"))
+print(model_of_the_transform)
+performance_data_center_transform <- predict(model_of_the_transform, performance_numeric_dataset)
+
+summary(performance_data_center_transform)
 ```
 
-...to be continued
+Standardize Data Transform
+BEFORE
+```{r}
+library(caret)
+summary(performance_numeric_dataset)
+
+sapply(performance_numeric_dataset[, 11], sd)
+model_of_the_transform <- preProcess(performance_numeric_dataset,
+                                     method = c("scale", "center"))
+print(model_of_the_transform)
+performance_data_standardize_transform <- predict(model_of_the_transform, performance_numeric_dataset) # nolint
+```
+AFTER
+```{r}
+summary(performance_data_standardize_transform)
+sapply(performance_data_standardize_transform[, 11], sd)
+```
+Normalize Data Transform
+```{r}
+summary(performance_numeric_dataset)
+model_of_the_transform <- preProcess(performance_numeric_dataset, method = c("range"))
+print(model_of_the_transform)
+performance_data_normalize_transform <- predict(model_of_the_transform, performance_numeric_dataset)
+summary(performance_data_normalize_transform)
+```
+Box-Cox Power Transform
+BEFORE
+```{r}
+library(e1071)
+summary(performance_data_standardize_transform)
+
+# Calculate the skewness before the Box-Cox transform
+sapply(performance_data_standardize_transform[, 11],  skewness, type = 2)
+sapply(performance_data_standardize_transform[, 11], sd)
+
+model_of_the_transform <- preProcess(performance_data_standardize_transform,
+                                     method = c("BoxCox"))
+print(model_of_the_transform)
+performance_data_box_cox_transform <- predict(model_of_the_transform,
+                                       performance_data_standardize_transform)
+```
+AFTER
+```{r}
+summary(performance_data_box_cox_transform)
+
+sapply(performance_data_box_cox_transform[, 11],  skewness, type = 2)
+sapply(performance_data_box_cox_transform[, 11], sd)
+
+# Calculate the skewness after the Box-Cox transform
+sapply(performance_data_box_cox_transform[, 11],  skewness, type = 2)
+sapply(performance_data_box_cox_transform[, 11], sd)
+```
+Yeo-Johnson Power Transform on the Crop Dataset 
+BEFORE
+```{r}
+ 
+summary(performance_data_standardize_transform)
+
+# Calculate the skewness before the Yeo-Johnson transform
+sapply(performance_data_standardize_transform[, 11],  skewness, type = 2)
+sapply(performance_data_standardize_transform[, 11], sd)
+
+model_of_the_transform <- preProcess(performance_data_standardize_transform,
+                                     method = c("YeoJohnson"))
+print(model_of_the_transform)
+performance_data_yeo_johnson_transform <- predict(model_of_the_transform, # nolint
+                                           performance_data_standardize_transform)
+```
+PCA for Dimensionality Reduction
+```{r}
+summary(performance_numeric_dataset)
+
+model_of_the_transform <- preProcess(performance_numeric_dataset, method =
+                                       c("scale", "center", "pca"))
+
+print(model_of_the_transform)
+performance_pca_dr <- predict(model_of_the_transform, performance_numeric_dataset)
+
+summary(performance_pca_dr)
+```
+PCA Linear Algebra Transform for Feature Extraction
+```{r}
+performance_pca_fe <- princomp(cor(performance_numeric_dataset[complete.cases(performance_numeric_dataset),]))
+summary(performance_pca_fe)
+```
+Scree Plot
+```{r}
+factoextra::fviz_eig(performance_pca_fe, addlabels = TRUE)
+```
+Loading Values
+```{r}
+performance_pca_fe$loadings[, 1:2]
+```
+
+```{r}
+factoextra::fviz_cos2(performance_pca_fe, choice = "var", axes = 1:4)
+```
+Biplot and Cos2 Combined Plot
+```{r}
+
+factoextra::fviz_pca_var(performance_pca_fe, col.var = "cos2",
+                         gradient.cols = c("red", "orange", "green"),
+                         repel = TRUE)
+```
+Independent Component Analysis (ICA) Linear Algebra Transform 
+ICA Linear Algebra Transform for Dimensionality Reduction 
+```{r}
+model_of_the_transform <- preProcess(performance_numeric_dataset,
+                                     method = c("scale", "center", "ica"),
+                                     n.comp = 8)
+print(model_of_the_transform)
+performance_ica_dr <- predict(model_of_the_transform, performance_numeric_dataset)
+
+summary(performance_ica_dr)
+```
+
+```{r}
+renv::snapshot()
+```
