@@ -10,6 +10,34 @@ Business Intelligence Project
   - [Loading the Dataset](#loading-the-dataset)
     - [Source:](#source)
     - [Reference:](#reference)
+  - [Subset](#subset)
+- [Scale Data Transform](#scale-data-transform)
+  - [BEFORE](#before)
+  - [AFTER](#after)
+- [Center Data Transform](#center-data-transform)
+- [Standardize Data Transform](#standardize-data-transform)
+  - [BEFORE](#before-1)
+  - [AFTER](#after-1)
+- [Normalize Data Transform](#normalize-data-transform)
+- [Box-Cox Power Transform](#box-cox-power-transform)
+  - [BEFORE](#before-2)
+  - [AFTER](#after-2)
+- [Yeo-Johnson Power Transform on the Crop
+  Dataset](#yeo-johnson-power-transform-on-the-crop-dataset)
+  - [BEFORE](#before-3)
+- [Principal Component Analysis (PCA) Linear Algebra
+  Transform](#principal-component-analysis-pca-linear-algebra-transform)
+  - [PCA Linear Algebra Transform for Dimensionality
+    Reduction](#pca-linear-algebra-transform-for-dimensionality-reduction)
+  - [PCA Linear Algebra Transform for Feature
+    Extraction](#pca-linear-algebra-transform-for-feature-extraction)
+    - [Scree Plot](#scree-plot)
+    - [Loading Values](#loading-values)
+    - [Biplot and Cos2 Combined Plot](#biplot-and-cos2-combined-plot)
+- [Independent Component Analysis (ICA) Linear Algebra
+  Transform](#independent-component-analysis-ica-linear-algebra-transform)
+  - [ICA Linear Algebra Transform for Dimensionality
+    Reduction](#ica-linear-algebra-transform-for-dimensionality-reduction)
 
 # Student Details
 
@@ -125,7 +153,7 @@ student_performance_dataset <-
 #View(student_performance_dataset)
 ```
 
-Subset
+## Subset
 
 ``` r
 library(dplyr)
@@ -154,7 +182,9 @@ performance_numeric_dataset <- performance_numeric_dataset %>%
   rename(Lab2 = `Lab 2 - 2.e. -  (Linear Regression using Gradient Descent) x/5`, Lab3 = `Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5`, Lab4 = `Lab 4-2.h.- (Linear Discriminant Analysis) x/5`, Lab5 = `Lab 5 - Chart JS Dashboard Setup x/5`, LabWork = `Lab Work (7%) x/25 x 100`, CAT1 = `CAT 1 (8%): x/38 x 100`, CAT2 = `CAT 2 (8%): x/100 x 100`, Absenteeism = `Absenteeism Percentage`, Coursework = `Coursework TOTAL: x/40 (40%)`, EXAM = `EXAM: x/60 (60%)`, TOTAL = `TOTAL = Coursework TOTAL + EXAM (100%)`)
 ```
 
-Scale Data Transform BEFORE
+# Scale Data Transform
+
+## BEFORE
 
 ``` r
 library(caret)
@@ -215,7 +245,7 @@ print(model_of_the_transform)
 performance_data_scale_transform <- predict(model_of_the_transform, performance_numeric_dataset)
 ```
 
-AFTER
+## AFTER
 
 ``` r
 summary(performance_data_scale_transform)
@@ -252,7 +282,8 @@ hist(performance_numeric_dataset_yield, main = names(performance_data_scale_tran
 ```
 
 ![](BIProject-Template_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-Center Data Transform
+
+# Center Data Transform
 
 ``` r
 summary(performance_numeric_dataset)
@@ -325,7 +356,9 @@ summary(performance_data_center_transform)
     ##  Max.   : 10.55396   Max.   : 22.06186   Max.   : 30.60  
     ##                      NA's   :4
 
-Standardize Data Transform BEFORE
+# Standardize Data Transform
+
+## BEFORE
 
 ``` r
 library(caret)
@@ -381,7 +414,7 @@ print(model_of_the_transform)
 performance_data_standardize_transform <- predict(model_of_the_transform, performance_numeric_dataset) # nolint
 ```
 
-AFTER
+## AFTER
 
 ``` r
 summary(performance_data_standardize_transform)
@@ -419,7 +452,7 @@ sapply(performance_data_standardize_transform[, 11], sd)
     ## TOTAL 
     ##     1
 
-Normalize Data Transform
+# Normalize Data Transform
 
 ``` r
 summary(performance_numeric_dataset)
@@ -491,7 +524,9 @@ summary(performance_data_normalize_transform)
     ##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
     ##                   NA's   :4
 
-Box-Cox Power Transform BEFORE
+# Box-Cox Power Transform
+
+## BEFORE
 
 ``` r
 library(e1071)
@@ -554,7 +589,7 @@ performance_data_box_cox_transform <- predict(model_of_the_transform,
                                        performance_data_standardize_transform)
 ```
 
-AFTER
+## AFTER
 
 ``` r
 summary(performance_data_box_cox_transform)
@@ -614,7 +649,9 @@ sapply(performance_data_box_cox_transform[, 11], sd)
     ## TOTAL 
     ##     1
 
-Yeo-Johnson Power Transform on the Crop Dataset BEFORE
+# Yeo-Johnson Power Transform on the Crop Dataset
+
+## BEFORE
 
 ``` r
 summary(performance_data_standardize_transform)
@@ -680,7 +717,9 @@ performance_data_yeo_johnson_transform <- predict(model_of_the_transform, # noli
                                            performance_data_standardize_transform)
 ```
 
-PCA for Dimensionality Reduction
+# Principal Component Analysis (PCA) Linear Algebra Transform
+
+## PCA Linear Algebra Transform for Dimensionality Reduction
 
 ``` r
 summary(performance_numeric_dataset)
@@ -751,7 +790,7 @@ summary(performance_pca_dr)
     ##  Max.   : 2.51939   Max.   : 2.2576   Max.   : 1.86095   Max.   : 1.49699  
     ##  NA's   :42         NA's   :42        NA's   :42         NA's   :42
 
-PCA Linear Algebra Transform for Feature Extraction
+## PCA Linear Algebra Transform for Feature Extraction
 
 ``` r
 performance_pca_fe <- princomp(cor(performance_numeric_dataset[complete.cases(performance_numeric_dataset),]))
@@ -772,14 +811,15 @@ summary(performance_pca_fe)
     ## Proportion of Variance 5.676796e-07       0
     ## Cumulative Proportion  1.000000e+00       1
 
-Scree Plot
+### Scree Plot
 
 ``` r
 factoextra::fviz_eig(performance_pca_fe, addlabels = TRUE)
 ```
 
 ![](BIProject-Template_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
-Loading Values
+
+### Loading Values
 
 ``` r
 performance_pca_fe$loadings[, 1:2]
@@ -803,7 +843,8 @@ factoextra::fviz_cos2(performance_pca_fe, choice = "var", axes = 1:4)
 ```
 
 ![](BIProject-Template_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
-Biplot and Cos2 Combined Plot
+
+### Biplot and Cos2 Combined Plot
 
 ``` r
 factoextra::fviz_pca_var(performance_pca_fe, col.var = "cos2",
@@ -812,8 +853,10 @@ factoextra::fviz_pca_var(performance_pca_fe, col.var = "cos2",
 ```
 
 ![](BIProject-Template_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
-Independent Component Analysis (ICA) Linear Algebra Transform ICA Linear
-Algebra Transform for Dimensionality Reduction
+
+# Independent Component Analysis (ICA) Linear Algebra Transform
+
+## ICA Linear Algebra Transform for Dimensionality Reduction
 
 ``` r
 model_of_the_transform <- preProcess(performance_numeric_dataset,
@@ -838,21 +881,21 @@ performance_ica_dr <- predict(model_of_the_transform, performance_numeric_datase
 summary(performance_ica_dr)
 ```
 
-    ##       ICA1               ICA2              ICA3               ICA4        
-    ##  Min.   :-2.94578   Min.   :-2.8774   Min.   :-2.02141   Min.   :-2.3282  
-    ##  1st Qu.:-0.27219   1st Qu.:-0.2804   1st Qu.:-0.47356   1st Qu.:-1.2666  
-    ##  Median : 0.08938   Median : 0.2992   Median :-0.07375   Median :-0.6965  
-    ##  Mean   :-0.00533   Mean   : 0.1614   Mean   : 0.02161   Mean   :-0.4946  
-    ##  3rd Qu.: 0.48591   3rd Qu.: 0.6671   3rd Qu.: 0.23940   3rd Qu.: 0.4311  
-    ##  Max.   : 2.12616   Max.   : 2.5417   Max.   : 4.31211   Max.   : 1.4957  
-    ##  NA's   :42         NA's   :42        NA's   :42         NA's   :42       
+    ##       ICA1              ICA2              ICA3               ICA4         
+    ##  Min.   :-4.2699   Min.   :-4.2872   Min.   :-2.12727   Min.   :-3.81273  
+    ##  1st Qu.:-0.6584   1st Qu.:-0.3688   1st Qu.:-0.48260   1st Qu.:-0.20854  
+    ##  Median :-0.1362   Median : 0.1049   Median :-0.03781   Median : 0.22256  
+    ##  Mean   :-0.2185   Mean   :-0.0754   Mean   : 0.03789   Mean   : 0.07018  
+    ##  3rd Qu.: 0.2699   3rd Qu.: 0.3994   3rd Qu.: 0.38383   3rd Qu.: 0.58491  
+    ##  Max.   : 1.7807   Max.   : 2.4903   Max.   : 2.82842   Max.   : 1.95951  
+    ##  NA's   :42        NA's   :42        NA's   :42         NA's   :42        
     ##       ICA5              ICA6               ICA7              ICA8         
-    ##  Min.   :-1.9260   Min.   :-4.27909   Min.   :-2.1527   Min.   :-3.84609  
-    ##  1st Qu.:-0.8045   1st Qu.:-0.69342   1st Qu.:-1.1175   1st Qu.:-0.23245  
-    ##  Median : 0.2872   Median :-0.09667   Median :-0.4881   Median : 0.19986  
-    ##  Mean   : 0.1304   Mean   :-0.21697   Mean   :-0.2659   Mean   : 0.03717  
-    ##  3rd Qu.: 1.0180   3rd Qu.: 0.24669   3rd Qu.: 0.5300   3rd Qu.: 0.59729  
-    ##  Max.   : 2.0126   Max.   : 2.52223   Max.   : 2.0014   Max.   : 1.73654  
+    ##  Min.   :-1.9217   Min.   :-2.99422   Min.   :-2.0233   Min.   :-2.23297  
+    ##  1st Qu.:-1.0371   1st Qu.:-0.46904   1st Qu.:-1.3130   1st Qu.:-0.86328  
+    ##  Median :-0.3873   Median : 0.06741   Median :-0.8383   Median :-0.11871  
+    ##  Mean   :-0.2391   Mean   : 0.02637   Mean   :-0.5349   Mean   :-0.05943  
+    ##  3rd Qu.: 0.6030   3rd Qu.: 0.49171   3rd Qu.: 0.3618   3rd Qu.: 0.81901  
+    ##  Max.   : 1.6687   Max.   : 2.81136   Max.   : 1.6152   Max.   : 1.99176  
     ##  NA's   :42        NA's   :42         NA's   :42        NA's   :42
 
 ``` r
